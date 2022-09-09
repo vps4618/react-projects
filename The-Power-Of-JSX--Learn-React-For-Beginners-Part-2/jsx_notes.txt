@@ -1,0 +1,23 @@
+1. if our component has no parent element.we have to use fragment (<></>)
+
+eg:-function App() {
+  return (
+    <>
+      <button>click me</button>
+      <button>click me</button>
+      <p>0</p>
+    </>
+  );
+}
+
+2. Class keyword is a reserved keyword in js.So we cannot use class keywordin jsx.Foe that We have to use keyword className.
+
+eg:-function App() {
+  return (
+    <div className="wow">
+      <button>click me</button>
+      <button>click me</button>
+      <p>0</p>
+    </div>
+  );
+}
