@@ -1,0 +1,1 @@
+set the homepage in package.json to "https://<username>.github.io/<reponame>/" of course substituting things in <>
