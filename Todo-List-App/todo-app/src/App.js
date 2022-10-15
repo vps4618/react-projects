@@ -12,6 +12,7 @@ function App() {
   const [filteredTodos, setFilteredTodos] = useState([]);
 
   //useEffect
+  
   // run once when the app start
   useEffect(() => {
     getLocalTodos();
