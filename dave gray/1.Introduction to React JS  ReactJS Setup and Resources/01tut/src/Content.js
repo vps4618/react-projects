@@ -1,53 +1,82 @@
 import React from "react";
+import { FaTrashAlt } from "react-icons/fa";
 import { useState } from "react";
 
 const Content = () => {
-  const [name, setName] = useState("dave");
-  const [count, setCount] = useState(0);
+  const [items, setItems] = useState([
+    {
+      id: 1,
+      checked: false,
+      item: "One half pound bag of cocoa covered  almonds unsalted",
+      price: 300,
+    },
+    {
+      id: 2,
+      checked: false,
+      item: "Item 2",
+      price: 200,
+    },
+    {
+      id: 3,
+      checked: false,
+      item: "Item 3",
+      price: 150,
+    },
+  ]);
 
-  const handleNameChange = () => {
-    const names = [
-      "Vishwa",
-      "Praveen",
-      "Sarathchandra",
-      "Mandipa",
-      "Yasitha",
-      "Supun",
-      "Navitha",
-    ];
-    const int = Math.floor(Math.random() * names.length);
-    setName(names[int]);
+  const handleCheck = (id) => {
+    const listItems = items.map((item) => {
+      return item.id === id ? { ...item, checked: !item.checked } : item;
+    });
+    setItems(listItems);
+    localStorage.setItem("ShoppingList", JSON.stringify(listItems));
   };
 
-  // count get 0 into this function.So eventhough
-  //we change it inside this function it will show 0
-  /*
-   const showCount = () => {
-    setCount(count + 1);
-
-    console.log(count);
-  }
-
-  */
-
-  const changeCount = () => {
-    setCount(count + 1);
+  const handleDelete = (id) => {
+    const listItems = items.filter((item) => {
+      return item.id !== id;
+    });
+    setItems(listItems);
+    localStorage.setItem("ShoppingList", JSON.stringify(listItems));
   };
 
-  const showCount = () => {
-    alert(count);
-  };
+  var price = 0;
 
   return (
     <main>
-      <p>Hello {name}!</p>
-
-      {/* We cannot call printName like printName() in click event
-       .beacuse it call only once page loads not button clicked*/}
-
-      <button onClick={handleNameChange}>Show Name</button>
-      <button onClick={changeCount}>Change Count</button>
-      <button onClick={showCount}>Show Count</button>
+      {items.length ? (
+        <ul>
+          {items.map((item) => {
+            price = price + item.price;
+            return (
+              <li key={item.id} className="item">
+                <input
+                  type="checkbox"
+                  checked={item.checked}
+                  onChange={() => handleCheck(item.id)}
+                ></input>
+                <label
+                  style={
+                    item.checked ? { textDecoration: "line-through" } : null
+                  }
+                  onDoubleClick={() => handleCheck(item.id)}
+                >
+                  {item.item}
+                </label>
+                <label className="price">{"Rs." + item.price}</label>
+                <FaTrashAlt
+                  tabIndex="0"
+                  role="button"
+                  onClick={() => handleDelete(item.id)}
+                />
+                </li>
+            );
+          })}
+          <li className="item totalPrice">Total Price to spend : Rs.{price}</li>
+        </ul>
+      ) : (
+        <p>Your List is empty !</p>
+      )}
     </main>
   );
 };
