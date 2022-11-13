@@ -1,0 +1,12 @@
+.welcome-box {}
+
+.noOfRoundsDialog {
+    display: none;
+}
+
+.userInputBox {
+    display: none;
+}
+.resultBox{
+display:none;
+}

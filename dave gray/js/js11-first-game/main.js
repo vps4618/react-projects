@@ -1,3 +1,16 @@
+// console.log("Cookies: " + navigator.cookieEnabled);
+// console.log("Browser Language: " + navigator.browserLanguage);
+// console.log("Language: " + navigator.language);
+// console.log("Platform: " + navigator.platform);
+// console.log("Connection Speed: " + navigator.connectionSpeed);
+// console.log("User Agent: " + navigator.userAgent);
+// console.log("Webdriver: " + navigator.webdriver);
+
+// var info = fetch("https://ipapi.co/json")
+//   .then((response) => response.json())
+//   .then((responsejson) => {
+//     console.log(responsejson);
+//   });
 //Your First Interactive Game
 function startGame() {
   let playGame = confirm("Shall we play rock, paper or scissors ? 😊");

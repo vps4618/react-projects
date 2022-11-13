@@ -1,0 +1,29 @@
+<html>
+
+<head>
+    <title>rock paper scissors game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="welcome-box" id="box">
+        <h1>welcome to rock paper scissors game</h1>
+        <button onclick="start()">Go!</button>
+    </div>
+    <div class="noOfRoundsDialog" id="noOfRoundsDialog">
+        <h2>This game has 1 rounds</h2>
+        <button onclick="gameStart()">Ok</button>
+    </div>
+    <div class="userInputBox" id="userInputBox">
+        <label>Enter rock,paper or scissors here.</label>
+        <input id="userInput">
+        <button onclick="showResult()">Ok</button>
+    </div>
+    <div class="resultBox" id="resultBox">
+        <p id="result"></p>
+        <button onclick="end()">Replay</button>
+    </div>
+    <script src="main.js"></script>
+</body>
+
+</html>
