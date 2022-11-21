@@ -119,22 +119,24 @@ app.post("/api/comments", (req, res) => {
             }'s comment added successfully !`,
             customerId: this.lastID,
           });
-
-          // dev comment
-          let devName = "<font style='color:gold'>Vps4618<sup>dev</sup></font>";
-          let devMessage =
-            "<font style='color:maroon;font-weight:bold;'>" +
-            `Thank you ${firstName1 + " " + lastName1} 🧡` +
-            "</font>";
-          let devLastName = "";
-          let devParams = [devName, devLastName, devMessage,dateTime];
-          db.run(sql, devParams, (err) => {
-            if (err) {
-              res.status(400).json({ error: err.message });
-            } else {
-              res.status(201);
-            }
-          });
+          if (!isDev) {
+            // dev comment
+            let devName =
+              "<font style='color:gold'>Vps4618<sup>dev</sup></font>";
+            let devMessage =
+              "<font style='color:maroon;font-weight:bold;'>" +
+              `Thank you ${firstName1 + " " + lastName1} 🧡` +
+              "</font>";
+            let devLastName = "";
+            let devParams = [devName, devLastName, devMessage, dateTime];
+            db.run(sql, devParams, (err) => {
+              if (err) {
+                res.status(400).json({ error: err.message });
+              } else {
+                res.status(201);
+              }
+            });
+          }
         }
       });
     }
