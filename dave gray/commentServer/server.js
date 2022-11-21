@@ -2,7 +2,9 @@ const express = require("express");
 const db = require("./database");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const nodemailer = require("nodemailer");
 require("dotenv/config");
+const striptags = require("striptags");
 
 const PORT = 8080 || process.env.PORT;
 const host = "localhost";
@@ -13,8 +15,8 @@ app.use(bodyParser.json());
 // disable CORS error
 app.use(
   cors({
-    origin: "https://vps4618.github.io",
-    methods: ["GET", "POST","DELETE"],
+    origin: "*",
+    methods: ["GET", "POST", "DELETE"],
   })
 );
 
@@ -28,9 +30,14 @@ app.post("/api/comments", (req, res) => {
   try {
     const { firstName, lastName, comment, dateTime } = req.body;
 
-    if (firstName === "delete") {
-      let id = lastName;
-      let enterkey = comment;
+    // remove html tags in case !!!
+    let firstName1 = striptags(firstName);
+    let lastName1 = striptags(lastName);
+    let comment1 = striptags(comment);
+
+    if (firstName1 === "delete") {
+      let id = lastName1;
+      let enterkey = comment1;
       if (enterkey === process.env.enterKey) {
         db.run(
           "DELETE FROM handCricketComments WHERE id=?",
@@ -47,16 +54,54 @@ app.post("/api/comments", (req, res) => {
         res.status(400).json({ error: "Invalid key !" });
       }
     } else {
+      
+      if(firstName1 === process.env.devName){
+        firstName1 = "<font style='gold'>Vps4618<sup>dev</sup></font>";
+      }
+
       const sql =
         "INSERT INTO handCricketComments (firstName,lastName,comment,dateTime) VALUES (?,?,?,?)";
-      const params = [firstName, lastName, comment, dateTime];
+      const params = [firstName1, lastName1, comment1, dateTime];
       db.run(sql, params, (err) => {
         if (err) {
           res.status(400).json({ error: err.message });
         } else {
+          // async..await is not allowed in global scope, must use a wrapper
+          async function main() {
+            // Generate test SMTP service account from ethereal.email
+            // Only needed if you don't have a real mail account for testing
+            let testAccount = await nodemailer.createTestAccount();
+
+            // create reusable transporter object using the default SMTP transport
+            let transporter = nodemailer.createTransport({
+              service: "gmail",
+              auth: {
+                user: "handCricketComment4618@gmail.com", // generated ethereal user
+                pass: process.env.appPwd, // gmail generated app password
+              },
+            });
+
+            // send mail with defined transport object
+            let info = await transporter.sendMail({
+              from: `"Hand Cricket Comment" <handCricketComment4618@gmail.com>`, // sender address
+              to: "vishwapraveen4618@gmail.com", // list of receivers
+              subject: `${firstName1} comment`, // Subject line
+              // text: `Name : ${firstName + " "  +lastName} \nComment : ${comment}\nDate : ${dateTime}`, // plain text body
+              html: `<label style="font-size:20px;font-weight:bold;">Name</label> : <label style="font-size:15px">${firstName1 + " "  +lastName1}</label><br>
+              <br>
+              <label style="font-size:20px;font-weight:bold;">Comment</label> : <label style="font-size:15px">${comment1}</label>
+              <br>
+              <br>
+              <label style="font-size:20px;font-weight:bold;">Date</label> : <label style="font-size:15px">${dateTime}</label>`, // html body
+            });
+
+          }
+
+          main().catch(console.error);
+
           res.status(201).json({
             message: `${
-              firstName + " " + lastName
+              firstName1 + " " + lastName1
             }'s comment added successfully !`,
             customerId: this.lastID,
           });
