@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 // disable CORS error
 app.use(
   cors({
-    origin: "*",
+    origin: "https://vps4618.github.io",
     methods: ["GET", "POST", "DELETE"],
   })
 );
@@ -34,7 +34,8 @@ app.post("/api/comments", (req, res) => {
     let firstName1 = striptags(firstName);
     let lastName1 = striptags(lastName);
     let comment1 = striptags(comment);
-
+    let isDev = false;
+    
     if (firstName1 === "delete") {
       let id = lastName1;
       let enterkey = comment1;
@@ -56,7 +57,10 @@ app.post("/api/comments", (req, res) => {
     } else {
       
       if(firstName1 === process.env.devName){
-        firstName1 = "<font style='gold'>Vps4618<sup>dev</sup></font>";
+        firstName1 = "<font style='color:gold'>Vps4618<sup>dev</sup></font>";
+        lastName1 = "";
+        comment1 = "<font style='color:maroon;font-weight:bold;'>" + comment1+"</font>";
+        isDev = true;
       }
 
       const sql =
@@ -66,6 +70,7 @@ app.post("/api/comments", (req, res) => {
         if (err) {
           res.status(400).json({ error: err.message });
         } else {
+          if(!isDev){
           // async..await is not allowed in global scope, must use a wrapper
           async function main() {
             // Generate test SMTP service account from ethereal.email
@@ -98,7 +103,7 @@ app.post("/api/comments", (req, res) => {
           }
 
           main().catch(console.error);
-
+          }
           res.status(201).json({
             message: `${
               firstName1 + " " + lastName1
