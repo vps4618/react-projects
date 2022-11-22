@@ -3,6 +3,7 @@ const db = require("./database");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
+const listOfRandomText = require("./randomText");
 require("dotenv/config");
 const striptags = require("striptags");
 
@@ -15,7 +16,7 @@ app.use(bodyParser.json());
 // disable CORS error
 app.use(
   cors({
-    origin: "https://vps4618.github.io",
+    origin: "*",
     methods: ["GET", "POST", "DELETE"],
   })
 );
@@ -123,9 +124,10 @@ app.post("/api/comments", (req, res) => {
             // dev comment
             let devName =
               "<font style='color:gold'>Vps4618<sup>dev</sup></font>";
+            let randomInt = Math.floor(Math.random() * listOfRandomText.length);
             let devMessage =
               "<font style='color:maroon;font-weight:bold;'>" +
-              `Thank you ${firstName1 + " " + lastName1} 🧡` +
+              `${listOfRandomText[randomInt]} ${firstName1 + " " + lastName1} 🧡` +
               "</font>";
             let devLastName = "";
             let devParams = [devName, devLastName, devMessage, dateTime];
